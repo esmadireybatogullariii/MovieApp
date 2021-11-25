@@ -1,0 +1,9 @@
+package com.esma.movieapp.domain.model
+
+data class MovieDetail( val overview: String,
+                   val posterPath: String,
+                   val releaseDate: String,
+                   val title: String,
+                   val voteAverage: Double,
+
+)
