@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.esma.movieapp.commons.Constants
 import com.esma.movieapp.commons.Resource
-import com.esma.movieapp.domain.model.TvShowDetail
-import com.esma.movieapp.domain.use_case.get_movie_detail.GetMovieDetailUseCase
+import com.esma.movieapp.domain.model.toDetailHeader
 import com.esma.movieapp.domain.use_case.get_tv_show_detail.GetTvShowDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -35,12 +34,15 @@ class TvShowDetailViewModel @Inject constructor(
         getTvShowDetailUseCase(tvShowId).onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    _state.value = TvShowDetailState(tvShow = result.data)
+                    _state.value = TvShowDetailState(
+                        tvShow = result.data,
+                        detailHeader = result.data?.toDetailHeader()
+                    )
 
                 }
                 is Resource.Error -> {
                     _state.value =
-                        TvShowDetailState(error = result.message ?: "Unexpected error occured")
+                        TvShowDetailState(error = result.message ?: "İçerik Yüklenemedi")
 
                 }
                 is Resource.Loading -> {

@@ -5,12 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.esma.movieapp.commons.Constants
 import com.esma.movieapp.commons.Resource
 import com.esma.movieapp.domain.use_case.get_latest_tv_show.GetLatestTvShowUseCase
 import com.esma.movieapp.domain.use_case.get_popular_movies.GetPopularMoviesUseCase
 import com.esma.movieapp.domain.use_case.get_popular_tv_shows.GetPopularTvShowsUseCase
-import com.esma.movieapp.presentation.tv_show_detail.TvShowDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,11 +29,12 @@ class HomeViewModel @Inject constructor(
     val tvShowState: State<PopularTvShowState> = _tvShowState
     private val _latestTvShowState = mutableStateOf(LatestTvShowState())
     val latestTvShowState: State<LatestTvShowState> = _latestTvShowState
+
     init {
         getPopularTvShows()
         getPopularMovies()
         getLatestTvShow()
-        }
+    }
 
     private fun getPopularMovies() {
         getPopularMoviesUseCase().onEach { result ->
@@ -46,7 +45,7 @@ class HomeViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _movieState.value =
-                        PopularMovieState(error = result.message ?: "Unexpected error occured")
+                        PopularMovieState(error = result.message ?: "İçerik Yüklenemedi")
 
                 }
                 is Resource.Loading -> {
@@ -67,7 +66,7 @@ class HomeViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _tvShowState.value =
-                        PopularTvShowState(error = result.message ?: "Unexpected error occured")
+                        PopularTvShowState(error = result.message ?: "İçerik Yüklenemedi")
 
                 }
                 is Resource.Loading -> {
@@ -88,7 +87,7 @@ class HomeViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _latestTvShowState.value =
-                        LatestTvShowState(error = result.message ?: "Unexpected error occured")
+                        LatestTvShowState(error = result.message ?: "İçerik Yüklenemedi")
 
                 }
                 is Resource.Loading -> {

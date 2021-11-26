@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.esma.movieapp.commons.Constants
 import com.esma.movieapp.commons.Resource
+import com.esma.movieapp.domain.model.toDetailHeader
 import com.esma.movieapp.domain.use_case.get_movie_detail.GetMovieDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -33,12 +34,15 @@ class MovieDetailViewModel @Inject constructor(
         getMovieDetailUseCase(movieId).onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    _state.value = MovieDetailState(movie = result.data)
+                    _state.value = MovieDetailState(
+                        movie = result.data,
+                        detailHeader = result.data?.toDetailHeader()
+                    )
 
                 }
                 is Resource.Error -> {
                     _state.value =
-                        MovieDetailState(error = result.message ?: "Unexpected error occured")
+                        MovieDetailState(error = result.message ?: "İçerik Yüklenemedi")
 
                 }
                 is Resource.Loading -> {
