@@ -3,16 +3,15 @@ package com.esma.movieapp.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.esma.movieapp.presentation.home.HomeScreen
+import com.esma.movieapp.presentation.movie_detail.MovieDetailScreen
 import com.esma.movieapp.presentation.theme.MovieAppTheme
+import com.esma.movieapp.presentation.tv_show_detail.TvShowDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,23 +20,32 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MovieAppTheme() {
+            MovieAppTheme {
                 // A surface container using the 'background' color from the theme
-                    Surface(color = MaterialTheme.colors.background) {
-                        val navController = rememberNavController()
-                        NavHost(
-                            navController = navController,
-                            startDestination = Screen.HomeScreen.route
+                Surface(color = Color.Black) {
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.HomeScreen.route
+                    ) {
+                        composable(
+                            route = Screen.HomeScreen.route
                         ) {
-                            composable(
-                                route = Screen.HomeScreen.route
-                            ) {
-                                HomeScreen(navController)
-                            }
-
+                            HomeScreen(navController)
+                        }
+                        composable(
+                            route = Screen.MovieDetailScreen.route + "/{movieId}"
+                        ) {
+                            MovieDetailScreen(navController)
+                        }
+                        composable(
+                            route = Screen.TvShowDetailScreen.route + "/{showId}"
+                        ) {
+                            TvShowDetailScreen(navController = navController)
                         }
                     }
                 }
             }
         }
     }
+}
